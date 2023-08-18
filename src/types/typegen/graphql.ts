@@ -2214,6 +2214,7 @@ export type Introduction = {
   /** System stage field */
   stage: Stage;
   text: RichText;
+  title?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -2244,10 +2245,13 @@ export type IntroductionCreateInput = {
   localizations?: InputMaybe<IntroductionCreateLocalizationsInput>;
   /** text input for default locale (en) */
   text: Scalars['RichTextAST']['input'];
+  /** title input for default locale (en) */
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IntroductionCreateLocalizationDataInput = {
   text: Scalars['RichTextAST']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IntroductionCreateLocalizationInput = {
@@ -2320,7 +2324,9 @@ export type IntroductionManyWhereInput = {
 
 export enum IntroductionOrderByInput {
   IdAsc = 'id_ASC',
-  IdDesc = 'id_DESC'
+  IdDesc = 'id_DESC',
+  TitleAsc = 'title_ASC',
+  TitleDesc = 'title_DESC'
 }
 
 export type IntroductionParent = Section;
@@ -2408,10 +2414,13 @@ export type IntroductionUpdateInput = {
   localizations?: InputMaybe<IntroductionUpdateLocalizationsInput>;
   /** text input for default locale (en) */
   text?: InputMaybe<Scalars['RichTextAST']['input']>;
+  /** title input for default locale (en) */
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IntroductionUpdateLocalizationDataInput = {
   text?: InputMaybe<Scalars['RichTextAST']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IntroductionUpdateLocalizationInput = {
@@ -2445,10 +2454,13 @@ export type IntroductionUpdateManyInput = {
   localizations?: InputMaybe<IntroductionUpdateManyLocalizationsInput>;
   /** text input for default locale (en) */
   text?: InputMaybe<Scalars['RichTextAST']['input']>;
+  /** title input for default locale (en) */
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IntroductionUpdateManyLocalizationDataInput = {
   text?: InputMaybe<Scalars['RichTextAST']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IntroductionUpdateManyLocalizationInput = {
@@ -2553,6 +2565,25 @@ export type IntroductionWhereInput = {
   id_not_starts_with?: InputMaybe<Scalars['ID']['input']>;
   /** All values starting with the given string. */
   id_starts_with?: InputMaybe<Scalars['ID']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+  /** All values containing the given string. */
+  title_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values ending with the given string. */
+  title_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are contained in given list. */
+  title_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  title_not?: InputMaybe<Scalars['String']['input']>;
+  /** All values not containing the given string. */
+  title_not_contains?: InputMaybe<Scalars['String']['input']>;
+  /** All values not ending with the given string */
+  title_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values that are not contained in given list. */
+  title_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** All values not starting with the given string. */
+  title_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  /** All values starting with the given string. */
+  title_starts_with?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** References Introduction record uniquely */
