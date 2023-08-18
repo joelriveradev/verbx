@@ -7,7 +7,7 @@
   <ul class='flex text-gray-800 text-sm font-light'>
     <li>About</li>
     <li class='mx-4'>Give</li>
-    <li>Home</li>
+    <li><a href='/'>Home</a></li>
   </ul>
 
   <span class='text-gray-800 text-sm font-light'>Login</span>
