@@ -1,10 +1,9 @@
 import { GraphQLClient } from 'graphql-request'
-import type { PageServerLoad } from './$types'
 import type { BibleStudy } from '../types/typegen/graphql'
 import { GET_BIBLE_STUDIES } from '../queries'
 import type { HygraphResponse } from '../types'
 
-export const load: PageServerLoad = async () => {
+export const load = async () => {
   const url = import.meta.env.VITE_HYGRAPH_API_URL_HIGHPERF_CONST
   const hygraph = new GraphQLClient(url)
 
