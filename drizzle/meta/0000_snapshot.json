@@ -1,0 +1,236 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "5",
+  "dialect": "mysql",
+  "tables": {
+    "CourseProgress": {
+      "name": "CourseProgress",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "autoincrement": false,
+          "name": "user_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "course_id": {
+          "autoincrement": false,
+          "name": "course_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "progress": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "progress",
+          "type": "float",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "CourseProgress_id": {
+          "name": "CourseProgress_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "user_id": {
+          "name": "user_id",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        },
+        "course_id": {
+          "name": "course_id",
+          "columns": [
+            "course_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {}
+    },
+    "ModuleCompletion": {
+      "name": "ModuleCompletion",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "autoincrement": false,
+          "name": "user_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "course_id": {
+          "autoincrement": false,
+          "name": "course_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "section_id": {
+          "autoincrement": false,
+          "name": "section_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "module_id": {
+          "autoincrement": false,
+          "name": "module_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "complete": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "complete",
+          "type": "tinyint",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "ModuleCompletion_id": {
+          "name": "ModuleCompletion_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "user_id": {
+          "name": "user_id",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        },
+        "course_id": {
+          "name": "course_id",
+          "columns": [
+            "course_id"
+          ],
+          "isUnique": false
+        },
+        "section_id": {
+          "name": "section_id",
+          "columns": [
+            "section_id"
+          ],
+          "isUnique": false
+        },
+        "module_id": {
+          "name": "module_id",
+          "columns": [
+            "module_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {}
+    },
+    "SectionProgress": {
+      "name": "SectionProgress",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "autoincrement": false,
+          "name": "user_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "section_id": {
+          "autoincrement": false,
+          "name": "section_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "course_id": {
+          "autoincrement": false,
+          "name": "course_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "progress": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "progress",
+          "type": "float",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "SectionProgress_id": {
+          "name": "SectionProgress_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "indexes": {
+        "user_id": {
+          "name": "user_id",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        },
+        "section_id": {
+          "name": "section_id",
+          "columns": [
+            "section_id"
+          ],
+          "isUnique": false
+        },
+        "course_id": {
+          "name": "course_id",
+          "columns": [
+            "course_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

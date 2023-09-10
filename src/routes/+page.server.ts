@@ -1,11 +1,12 @@
 import { GraphQLClient } from 'graphql-request'
-import type { BibleStudy } from '../types/typegen/graphql'
 import { GET_BIBLE_STUDIES } from '../queries'
+import { HYGRAPH_API_URL_HIGHPERF } from '$env/static/private'
+
 import type { HygraphResponse } from '../types'
+import type { BibleStudy } from '../types/typegen/graphql'
 
 export const load = async () => {
-  const url = import.meta.env.VITE_HYGRAPH_API_URL_HIGHPERF_CONST
-  const hygraph = new GraphQLClient(url)
+  const hygraph = new GraphQLClient(HYGRAPH_API_URL_HIGHPERF)
 
   try {
     const { bibleStudies } = await hygraph.request<HygraphResponse<'bibleStudies', BibleStudy[]>>(

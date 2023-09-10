@@ -17379,29 +17379,6 @@
         "possibleTypes": null
       },
       {
-        "kind": "ENUM",
-        "name": "ModuleType",
-        "description": "The type of module in a Bible study section",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "CriticalThinking",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "Question",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
         "kind": "OBJECT",
         "name": "Mutation",
         "description": null,
@@ -24544,7 +24521,7 @@
             "args": [],
             "type": {
               "kind": "ENUM",
-              "name": "ModuleType",
+              "name": "QuestionType",
               "ofType": null
             },
             "isDeprecated": false,
@@ -24878,7 +24855,7 @@
             "description": null,
             "type": {
               "kind": "ENUM",
-              "name": "ModuleType",
+              "name": "QuestionType",
               "ofType": null
             },
             "defaultValue": null,
@@ -25446,7 +25423,7 @@
             "description": null,
             "type": {
               "kind": "ENUM",
-              "name": "ModuleType",
+              "name": "QuestionType",
               "ofType": null
             },
             "defaultValue": null,
@@ -25461,7 +25438,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "ModuleType",
+                "name": "QuestionType",
                 "ofType": null
               }
             },
@@ -25474,7 +25451,7 @@
             "description": "Any other value that exists and is not equal to the given value.",
             "type": {
               "kind": "ENUM",
-              "name": "ModuleType",
+              "name": "QuestionType",
               "ofType": null
             },
             "defaultValue": null,
@@ -25489,7 +25466,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "ModuleType",
+                "name": "QuestionType",
                 "ofType": null
               }
             },
@@ -26118,6 +26095,29 @@
         "possibleTypes": null
       },
       {
+        "kind": "ENUM",
+        "name": "QuestionType",
+        "description": "The type of module in a Bible study section",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CriticalThinking",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Question",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
         "kind": "INPUT_OBJECT",
         "name": "QuestionUpdateInput",
         "description": null,
@@ -26212,7 +26212,7 @@
             "description": null,
             "type": {
               "kind": "ENUM",
-              "name": "ModuleType",
+              "name": "QuestionType",
               "ofType": null
             },
             "defaultValue": null,
@@ -26567,7 +26567,7 @@
             "description": null,
             "type": {
               "kind": "ENUM",
-              "name": "ModuleType",
+              "name": "QuestionType",
               "ofType": null
             },
             "defaultValue": null,
@@ -27759,7 +27759,7 @@
             "description": null,
             "type": {
               "kind": "ENUM",
-              "name": "ModuleType",
+              "name": "QuestionType",
               "ofType": null
             },
             "defaultValue": null,
@@ -27774,7 +27774,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "ModuleType",
+                "name": "QuestionType",
                 "ofType": null
               }
             },
@@ -27787,7 +27787,7 @@
             "description": "Any other value that exists and is not equal to the given value.",
             "type": {
               "kind": "ENUM",
-              "name": "ModuleType",
+              "name": "QuestionType",
               "ofType": null
             },
             "defaultValue": null,
@@ -27802,7 +27802,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "ModuleType",
+                "name": "QuestionType",
                 "ofType": null
               }
             },

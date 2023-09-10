@@ -1,3 +1,4 @@
+import type { DefaultSession } from '@auth/core/types'
 export type ModuleType = 'Question' | 'CriticalThinking'
 
 export interface ExerciseMap {
@@ -5,3 +6,11 @@ export interface ExerciseMap {
 }
 
 export type HygraphResponse<K extends string, T> = Record<K, T>
+
+declare module '@auth/sveltekit' {
+  interface Session {
+    user: { id: string } & DefaultSession['user']
+    profile: {}
+    account: {}
+  }
+}

@@ -1,0 +1,6 @@
+export { default as Header } from './Header.svelte'
+export { default as Footer } from './Footer.svelte'
+export { default as CourseSection } from './CourseSection.svelte'
+export { default as ArrowLeft } from './icons/arrow-left.svelte'
+export { default as ArrowRight } from './icons/arrow-right.svelte'
+export { default as ArrowUp } from './icons/arrow-up.svelte'

@@ -23,7 +23,9 @@
         </p>
 
         <div class='flex items-center'>
-          <button class='bg-black text-white py-3 px-5 rounded-xl mr-5 hover:bg-cornflower font-semibold'>Get Started</button>
+          <a href='/classroom/{course.id}'>
+            <button class='bg-black text-white py-3 px-5 rounded-xl mr-5 hover:bg-cornflower font-semibold'>Get Started</button>
+          </a>
 
           {#if false}
             <button class='flex items-center font-semibold'>
@@ -74,7 +76,7 @@
 
     <!--Course Content Section-->
     <section class='px-10 py-10 lg:py-16 lg:pb-20 lg:px-28 border-t border-t-gray-100'>
-      <h1 class='font-bold lg:text-2xl mb-8'>Course Content</h1>
+      <h1 class='font-bold lg:text-2xl mb-4'>Course Content</h1>
 
       {#each course.sections as section}
         <CourseSection {section} />

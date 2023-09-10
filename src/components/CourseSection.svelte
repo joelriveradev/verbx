@@ -1,16 +1,22 @@
 <script lang='ts'>
   import type { Section } from '../types/typegen/graphql'
+  export let open = false
+  export let activeModule: string
 
-  $: active = false
-  const toggleActive = () => active = !active
+  $: expanded = open
+  const toggleActive = () => expanded = !expanded
 
+  export let padding = false
   export let section: Section
-  const { title, modules } = section
+  export let handleModuleClick: (id: string) => void
+
+  const { title } = section
 </script>
 
 <div class='course-section'>
   <div
-    class='flex items-center justify-between border-b border-b-gray-200 pb-5 cursor-pointer'
+    class='flex items-center justify-between border-b border-b-gray-100 py-5 pr-10 cursor-pointer hover:bg-gray-50'
+    class:pl-10={padding}
     on:click={toggleActive}
     on:keypress={toggleActive}
     role='button'
@@ -19,19 +25,25 @@
     <span class='font-light'>{title}</span>
 
     <img
-      class={active ? 'w-4 rotate-180 transition-transform' : 'w-4 transition-transform'}
+      class={expanded ? 'w-4 rotate-180 transition-transform' : 'w-4 transition-transform'}
       src='/carrot-down-xs.svg'
       alt=''
       aria-hidden
     />
   </div>
 
-  {#if active}
-    <div class='pt-5'>
-      {#each modules as module}
-        <p class='mb-5 font-light text-gray-500 text-sm'>
-          {module.title}
-        </p>
+  {#if expanded}
+    <div class='pt-5 pr-10' class:pl-10={padding}>
+      {#each section.modules as { id, title } }
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class='flex items-center mb-5 cursor-pointer' on:click={() => handleModuleClick(id)}>
+          <div class='w-3 h-3 rounded-full mr-3 border border-gray-400' />
+
+          <p class={activeModule === id ? 'font-medium text-black text-sm' : 'font-light text-gray-500 text-sm'}>
+            {title}
+          </p>
+        </div>
       {/each}
     </div>
   {/if}

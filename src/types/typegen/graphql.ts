@@ -2617,12 +2617,6 @@ export type LocationInput = {
   longitude: Scalars['Float']['input'];
 };
 
-/** The type of module in a Bible study section */
-export enum ModuleType {
-  CriticalThinking = 'CriticalThinking',
-  Question = 'Question'
-}
-
 export type Mutation = {
   __typename?: 'Mutation';
   /**
@@ -3519,7 +3513,7 @@ export type Question = {
   /** System stage field */
   stage: Stage;
   title?: Maybe<Scalars['String']['output']>;
-  type?: Maybe<ModuleType>;
+  type?: Maybe<QuestionType>;
   verses: Array<QuestionversesUnion>;
 };
 
@@ -3599,7 +3593,7 @@ export type QuestionCreateInput = {
   question: Scalars['String']['input'];
   /** title input for default locale (en) */
   title?: InputMaybe<Scalars['String']['input']>;
-  type?: InputMaybe<ModuleType>;
+  type?: InputMaybe<QuestionType>;
   verses?: InputMaybe<QuestionversesUnionCreateManyInlineInput>;
 };
 
@@ -3683,13 +3677,13 @@ export type QuestionManyWhereInput = {
   /** All values starting with the given string. */
   id_starts_with?: InputMaybe<Scalars['ID']['input']>;
   note?: InputMaybe<TextWhereInput>;
-  type?: InputMaybe<ModuleType>;
+  type?: InputMaybe<QuestionType>;
   /** All values that are contained in given list. */
-  type_in?: InputMaybe<Array<InputMaybe<ModuleType>>>;
+  type_in?: InputMaybe<Array<InputMaybe<QuestionType>>>;
   /** Any other value that exists and is not equal to the given value. */
-  type_not?: InputMaybe<ModuleType>;
+  type_not?: InputMaybe<QuestionType>;
   /** All values that are not contained in given list. */
-  type_not_in?: InputMaybe<Array<InputMaybe<ModuleType>>>;
+  type_not_in?: InputMaybe<Array<InputMaybe<QuestionType>>>;
   /** All values in which the union is empty. */
   verses_empty?: InputMaybe<Scalars['Boolean']['input']>;
   /** Matches if the modular component contains at least one connection to the item provided to the filter */
@@ -3789,6 +3783,12 @@ export type QuestionParentWhereUniqueInput = {
   Section?: InputMaybe<SectionWhereUniqueInput>;
 };
 
+/** The type of module in a Bible study section */
+export enum QuestionType {
+  CriticalThinking = 'CriticalThinking',
+  Question = 'Question'
+}
+
 export type QuestionUpdateInput = {
   /** answer input for default locale (en) */
   answer?: InputMaybe<Scalars['String']['input']>;
@@ -3801,7 +3801,7 @@ export type QuestionUpdateInput = {
   question?: InputMaybe<Scalars['String']['input']>;
   /** title input for default locale (en) */
   title?: InputMaybe<Scalars['String']['input']>;
-  type?: InputMaybe<ModuleType>;
+  type?: InputMaybe<QuestionType>;
   verses?: InputMaybe<QuestionversesUnionUpdateManyInlineInput>;
 };
 
@@ -3846,7 +3846,7 @@ export type QuestionUpdateManyInput = {
   question?: InputMaybe<Scalars['String']['input']>;
   /** title input for default locale (en) */
   title?: InputMaybe<Scalars['String']['input']>;
-  type?: InputMaybe<ModuleType>;
+  type?: InputMaybe<QuestionType>;
 };
 
 export type QuestionUpdateManyLocalizationDataInput = {
@@ -4022,13 +4022,13 @@ export type QuestionWhereInput = {
   title_not_starts_with?: InputMaybe<Scalars['String']['input']>;
   /** All values starting with the given string. */
   title_starts_with?: InputMaybe<Scalars['String']['input']>;
-  type?: InputMaybe<ModuleType>;
+  type?: InputMaybe<QuestionType>;
   /** All values that are contained in given list. */
-  type_in?: InputMaybe<Array<InputMaybe<ModuleType>>>;
+  type_in?: InputMaybe<Array<InputMaybe<QuestionType>>>;
   /** Any other value that exists and is not equal to the given value. */
-  type_not?: InputMaybe<ModuleType>;
+  type_not?: InputMaybe<QuestionType>;
   /** All values that are not contained in given list. */
-  type_not_in?: InputMaybe<Array<InputMaybe<ModuleType>>>;
+  type_not_in?: InputMaybe<Array<InputMaybe<QuestionType>>>;
   /** All values in which the union is empty. */
   verses_empty?: InputMaybe<Scalars['Boolean']['input']>;
   /** Matches if the modular component contains at least one connection to the item provided to the filter */
