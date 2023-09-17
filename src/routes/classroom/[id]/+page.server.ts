@@ -1,57 +1,22 @@
-import type { BibleStudy } from '../../../types/typegen/graphql'
-import type { HygraphResponse } from '../../../types'
+import type { CourseResponse } from '../../../types'
 import type { PageServerLoad, Actions } from './$types'
+import type { Module } from '../../../types/typegen/graphql'
+import type { NewModuleCompletion } from '../../../db/index.server'
 
+import {
+  updateCourseProgress,
+  updateModuleCompletion,
+  courseEnrollment,
+  calculateProgress
+} from '../../../db/index.server'
+
+import { db } from '../../../db/index.server'
+import { eq } from 'drizzle-orm'
+import { courseProgress } from '../../../db/drizzle/schema'
 import { GraphQLClient } from 'graphql-request'
 import { GET_BIBLE_STUDY } from '../../../queries'
 import { HYGRAPH_API_URL_HIGHPERF } from '$env/static/private'
-import { db, insertModuleCompletion } from '../../../db/index.server'
-import { enrollInCourse } from '../../../db/actions'
 import { redirect } from '@sveltejs/kit'
-
-export const actions = {
-  updateSection: async ({ locals, request }) => {},
-  updateModule: async ({ locals, request, params }) => {
-    const sesh = await locals.getSession()
-    const data = await request.formData()
-    const user = sesh?.user
-    const courseId = params.id
-    const sectionId = data.get('sectionId') as string
-    const moduleId = data.get('moduleId') as string
-    const answer = data.get('answer')
-
-    console.log({
-      userId: user?.id,
-      courseId,
-      sectionId,
-      moduleId,
-      complete: true,
-      answer
-    })
-
-    // await insertModuleCompletion({
-    //   userId: user?.id,
-    //   courseId,
-    //   sectionId,
-    //   moduleId,
-    //   complete: true
-    // })
-    //   .then(() => {})
-    //   .catch((error) => {
-    //     if (error instanceof Error) {
-    //       return new Response(null, {
-    //         status: 500,
-    //         statusText: error.message
-    //       })
-    //     }
-    //   })
-
-    return {
-      answer,
-      response: `That's correct!`
-    }
-  }
-} satisfies Actions
 
 export const load: PageServerLoad = async ({ locals, params }) => {
   const session = await locals.getSession()
@@ -60,14 +25,117 @@ export const load: PageServerLoad = async ({ locals, params }) => {
     throw redirect(303, `/auth/signIn?originalUrl=/classroom/${params.id}`)
   }
 
+  const courseId = params.id
+  const userId = session.user?.id
+
+  let activeModule: Module | undefined
+  let lastModule: Module | undefined
+  let modules: Array<NewModuleCompletion> = []
+
+  const progress = await db.select().from(courseProgress).where(eq(courseProgress.userId, userId))
   const hygraph = new GraphQLClient(HYGRAPH_API_URL_HIGHPERF)
+  const bibleStudy = await hygraph.request<CourseResponse>(GET_BIBLE_STUDY, { id: courseId })
 
-  const { bibleStudy } = await hygraph.request<HygraphResponse<'bibleStudy', BibleStudy>>(
-    GET_BIBLE_STUDY,
-    { id: params.id }
-  )
+  const { bibleStudy: course } = bibleStudy
 
-  await enrollInCourse(session.user?.id, params.id)
+  if (!progress.length) {
+    const defaultModule = course.sections[0].modules_v2[0]
 
-  return { session, bibleStudy }
+    course.sections.forEach(({ modules_v2 }) => {
+      modules_v2.forEach(({ id }) => {
+        modules.push({
+          userId,
+          courseId,
+          moduleId: id,
+          complete: false
+        })
+      })
+    })
+
+    await courseEnrollment({
+      courseId,
+      userId,
+      nextModule: defaultModule.order,
+      modules
+    })
+
+    return {
+      session,
+      course,
+      activeModule: defaultModule,
+      submitted: false,
+      answer: null,
+      response: null,
+      progress: 0
+    }
+  }
+
+  // This is faster than making yet
+  // another call to the CMS. We already
+  // have the data, might as well use it.
+  course.sections.forEach(({ modules_v2 }) => {
+    const nextModule = modules_v2.find(({ order }) => {
+      return order === progress[0].nextModule
+    })
+
+    if (nextModule) {
+      activeModule = nextModule
+    }
+    if (progress[0].complete) {
+      const last = modules_v2.find(({ order }) => {
+        return order === progress[0].nextModule! - 1
+      })
+
+      if (last) {
+        lastModule = last
+      }
+    }
+  })
+
+  return {
+    session,
+    course,
+    activeModule: progress[0].complete ? lastModule : activeModule,
+    progress: progress[0].progress,
+    complete: progress[0].complete
+  }
 }
+
+export const actions = {
+  default: async ({ locals, request, params }) => {
+    const session = await locals.getSession()
+    const data = await request.formData()
+    const user = session?.user
+    const userId = user?.id
+
+    const courseId = params.id
+    const moduleId = data.get('moduleId') as string
+    const order = data.get('order') as string
+    const answer = data.get('answer') as string
+
+    await updateModuleCompletion({
+      userId,
+      courseId,
+      moduleId,
+      complete: true,
+      answer
+    })
+
+    const progress = await calculateProgress(userId, courseId)
+    const complete = progress === 100
+
+    await updateCourseProgress({
+      userId,
+      courseId,
+      progress,
+      nextModule: Number(order) + 1,
+      complete
+    })
+
+    return {
+      answer,
+      submitted: true,
+      response: null
+    }
+  }
+} satisfies Actions
