@@ -1,7 +1,6 @@
 import { SvelteKitAuth } from '@auth/sveltekit'
-import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import { db, insertUser } from './db/index.server'
-import { users } from '../drizzle/schema'
+import { users } from './db/drizzle/schema'
 import { eq } from 'drizzle-orm'
 
 import Google from '@auth/core/providers/google'
