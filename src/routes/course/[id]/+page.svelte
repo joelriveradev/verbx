@@ -2,10 +2,10 @@
   import CourseSection from '../../../components/CourseSection.svelte'
   export let data
 
-  const { bibleStudy: course } = data
+  const { progress, bibleStudy: course } = data
 
     const moduleCount = course?.sections.reduce(
-    (prev, { modules }) => prev + modules.length, 0
+    (prev, { modules_v2 }) => prev + modules_v2.length, 0
   )
 </script>
 
@@ -24,12 +24,15 @@
 
         <div class='flex items-center'>
           <a href='/classroom/{course.id}'>
-            <button class='bg-black text-white py-3 px-5 rounded-xl mr-5 hover:bg-cornflower font-semibold'>Get Started</button>
+            <button
+              class='bg-black text-white py-3 px-5 rounded-xl mr-5 hover:bg-cornflower font-semibold'>
+              {progress?.progress ? 'Continue': 'Get Started'}
+            </button>
           </a>
 
-          {#if false}
+          {#if progress?.progress}
             <button class='flex items-center font-semibold'>
-              Learn More <img class='ml-3 'src='/arrow-right-xs.svg' aria-hidden alt='' />
+              {progress?.progress}% Complete
             </button>
           {/if}
         </div>
