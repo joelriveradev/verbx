@@ -1,11 +1,11 @@
 <script lang='ts'>
-  import type { PageData } from './$types'
-  export let data: PageData
+  export let data
+  const { bibleStudies: courses } = data
 </script>
 
 <div class='w-full lg:flex flex-col'>
   <!--Hero Section-->
-  <div class='w-full lg:flex items-center justify-between mx-auto px-10 py-10 lg:py-10 lg:px-28 border-b border-b-gray-100'>
+  <section class='w-full lg:flex items-center justify-between mx-auto px-10 py-10 lg:py-10 lg:px-28 border-b border-b-gray-100'>
     <div class='max-w-sm'>
       <h1 class='font-bold text-3xl lg:text-5xl'>
         Learn the Bible like <span class='text-cornflower'>never</span> before!
@@ -29,22 +29,24 @@
       src='/hero.svg'
       alt='A playful assortment of colorful shapes, and icons.'
     />
-  </div>
+  </section>
 
   <!--Bible Studies Section-->
   <section class='px-10 py-10 lg:py-16 lg:pb-20 lg:px-28'>
     <h1 class='font-bold lg:text-2xl mb-8'>Bible Courses</h1>
 
     <div class='mt-0 grid'>
-      {#if data.bibleStudies?.length}
-        {#each data.bibleStudies as study}
-          <div class='w-[280px] cursor-pointer hover:scale-105 transition-transform'>
-            <img class='rounded-tl-3xl rounded-tr-3xl' src={study.image.url} alt='' />
+      {#if courses?.length}
+        {#each courses as course}
+          <a href='/course/{course.id}'>
+            <div class='w-[280px] cursor-pointer hover:scale-105 transition-transform'>
+              <img class='rounded-tl-3xl rounded-tr-3xl' src={course.image.url} alt='' />
 
-            <p class='border border-gray-300 p-5 font-bold rounded-br-xl shadow-md shadow-gray-300'>
-              {study.title}
-            </p>
-          </div>
+              <p class='border border-gray-300 p-5 font-bold rounded-br-xl shadow-md shadow-gray-300'>
+                {course.title}
+              </p>
+            </div>
+          </a>
         {/each}
       {/if}
     </div>

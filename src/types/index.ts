@@ -1,3 +1,4 @@
+import type { BibleStudy, Section } from './typegen/graphql'
 export type ModuleType = 'Question' | 'CriticalThinking'
 
 export interface ExerciseMap {
@@ -5,3 +6,6 @@ export interface ExerciseMap {
 }
 
 export type HygraphResponse<K extends string, T> = Record<K, T>
+export type CourseResponse = HygraphResponse<'bibleStudy', BibleStudy>
+export type CoursesResponse = HygraphResponse<'bibleStudies', BibleStudy[]>
+export type CourseSections = HygraphResponse<'sections', Section[]>
