@@ -43,6 +43,20 @@ export const GET_BIBLE_STUDY = gql`
               text
             }
           }
+          commentaries {
+            text {
+              text
+            }
+            reference
+            author
+          }
+          connectingVerses {
+            reference
+            text {
+              text
+            }
+          }
+          note
         }
       }
     }
