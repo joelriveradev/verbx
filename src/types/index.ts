@@ -1,4 +1,4 @@
-import type { DefaultSession } from '@auth/core/types'
+import type { BibleStudy, Section } from './typegen/graphql'
 export type ModuleType = 'Question' | 'CriticalThinking'
 
 export interface ExerciseMap {
@@ -6,11 +6,5 @@ export interface ExerciseMap {
 }
 
 export type HygraphResponse<K extends string, T> = Record<K, T>
-
-declare module '@auth/sveltekit' {
-  interface Session {
-    user: { id: string } & DefaultSession['user']
-    profile: {}
-    account: {}
-  }
-}
+export type CourseResponse = HygraphResponse<'bibleStudy', BibleStudy>
+export type CourseSections = HygraphResponse<'sections', Section[]>
