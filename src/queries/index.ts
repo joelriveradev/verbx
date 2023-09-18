@@ -33,7 +33,7 @@ export const GET_BIBLE_STUDY = gql`
           order
           isCriticalthinking
           introduction {
-            text
+            html
           }
           question
           answer
