@@ -5,6 +5,10 @@
 
   import { CourseSection, ArrowRight, ArrowUp, ProgressRing } from '../../../components'
   import { enhance } from '$app/forms'
+  import { slide } from 'svelte/transition'
+  import { quintInOut } from 'svelte/easing'
+  import { animate } from 'motion'
+  import { onMount } from 'svelte'
 
   export let data : PageData
 
@@ -13,6 +17,10 @@
   let disabled    : boolean
   let submitted   : boolean = false
   let response    : string | null
+  let cnVerseOpen : boolean = true
+  let commentariesOpen = true
+
+  let titleRef: HTMLElement
 
   $: {
     isLoading,
@@ -21,9 +29,15 @@
     submitted,
     response  = null
   }
+
+  onMount(() => {
+    if(titleRef){
+      animate(titleRef, { opacity: 1, }, { duration: 1 })
+    }
+  })
 </script>
 
-<div class='flex items-start justify-between h-screen'>
+<div class='flex items-start justify-between min-h-screen'>
   {#if data.activeModule}
 
     {@const {
@@ -33,7 +47,10 @@
       isCriticalthinking,
       question,
       verses,
-      order
+      order,
+      note,
+      connectingVerses,
+      commentaries
       } = data.activeModule
     }
 
@@ -96,7 +113,7 @@
     {/if}
 
     {#if !data.complete}
-      <main class='w-3/4 h-full p-10'>
+      <main class='opacity-0 w-3/4 h-full p-10' bind:this={titleRef}>
         <div class='max-w-xl'>
           <button
             class='text-xs flex items-center group'
@@ -114,7 +131,10 @@
           <!--Section Modules-->
           {#if introduction}
             <h1 class='font-semibold text-lg mt-5 mb-3'>{title}</h1>
-            <p class='font-light'>{introduction.text}</p>
+
+            <div class='font-light prose prose-p:leading-6 prose-li:leading-3'>
+              {@html introduction.html}
+            </div>
 
             <form method='POST' use:enhance={() => async ({ update }) => {
               await update()
@@ -132,12 +152,12 @@
             <header>
               <div class='flex items-start mt-5 mb-3'>
                 <img class='pt-1 w-5 mr-3' {src} alt='' aria-hidden />
-                <h1 class='font-medium text-lg'>{question}</h1>
+                <h1 class='font-medium text-xl'>{question}</h1>
               </div>
             </header>
 
             {#each verses as { id, text } (id) }
-              <p class='mt-3 text-xl text-gray-500 font-light'>
+              <p class='mt-3 text-lg text-gray-500 font-light'>
                 {text?.text}
               </p>
             {/each}
@@ -145,8 +165,8 @@
             <form
               method='POST'
               use:enhance={({ cancel }) => {
-                if(disabled){
-                  cancel()
+                if(disabled || submitted){
+                  return cancel()
                 }
                 isLoading = true
 
@@ -155,42 +175,33 @@
                     isLoading = false
                     submitted = true
 
-                    if(result?.data?.response){
-                      response = result.data.response
+                    if(result?.data?.feedback){
+                      response = result.data.feedback
                     }
                   }
                 }
               }}>
-              <div class='flex items-center justify-center mt-5'>
+              <div class='flex items-center justify-center mt-5 relative'>
                 <input type='hidden' name='moduleId' value={id} />
                 <input type='hidden' name='order' value={order} />
 
-                {#if isCriticalthinking}
-                  <textarea
-                    class='w-full mr-3 border border-black p-3 pb-3.5 font-light rounded-xl'
-                    placeholder="Type your answer here"
-                    name='answer'
-                    required
-                    bind:value={answer}
-                  />
-
-                  {:else}
-                  <input
-                    required
-                    name='answer'
-                    class='w-full mr-3 border border-black p-2 pb-2.5 px-3 font-light rounded-xl focus:outline-black'
-                    type='text'
-                    placeholder='Type your answer here'
-                    bind:value={answer}
-                  />
-                {/if}
+                <input
+                  required
+                  name='answer'
+                  class='w-full text-sm border border-gray-300 p-3 pb-3.5 px-3 font-light rounded-xl focus:outline-0 focus:border-black pr-12 hover:bg-gray-50 focus:bg-gray-50'
+                  type='text'
+                  placeholder='Type your answer here'
+                  disabled={submitted}
+                  bind:value={answer}
+                />
 
                 {#if !isLoading}
                   <button
                     type='submit'
                     disabled={disabled}
-                    class='w-5 h-5 rounded-full flex items-center justify-center hover:scale-110 transition-all shrink-0'
+                    class='w-5 h-5 rounded-full flex items-center justify-center scale-90 hover:scale-110 transition-all absolute right-4'
                     class:bg-black={!disabled && !submitted}
+                    class:scale-100={!disabled}
                     class:bg-green-100={submitted}
                     class:bg-gray-300={disabled}
                     class:cursor-not-allowed={disabled}>
@@ -207,14 +218,122 @@
                 {/if}
 
                 {#if isLoading}
-                  <img
-                    class='w-5 h-5 animate-spin'
-                    src='/spinner.svg'
-                    alt='rotating spinner icon'
-                  />
+                  <div class='w-5 h-5 rounded-full border-2 border-black border-dotted animate-spin absolute right-4' />
                 {/if}
               </div>
             </form>
+
+            {#if  connectingVerses.length}
+              <!--Connecting Verses-->
+              <!-- svelte-ignore a11y-click-events-have-key-events -->
+              <!-- svelte-ignore a11y-no-static-element-interactions -->
+              <button
+                on:click={async () => cnVerseOpen = !cnVerseOpen}
+                class='w-full flex items-center justify-between mt-6 py-4 px-5 bg-gray-50 border hover:bg-gray-100 border-gray-200 rounded-xl font-bold cursor-pointer'>
+                <div class='flex items-center'>
+                  <img class='w-3.5 mr-3' src='/connecting-verses.svg' alt='' aria-hidden />
+
+                  <p class='text-[12px]'>
+                    {connectingVerses.length} Connecting Verses
+                  </p>
+                </div>
+
+                <img
+                  class={cnVerseOpen ? 'w-3 rotate-180 transition-transform' : 'w-3 transition-transform'}
+                  src='/carrot-down-xs.svg'
+                  alt=''
+                  aria-hidden
+                />
+              </button>
+
+              {#if cnVerseOpen}
+                <div class='p-5 mt-2 bg-gray-50 border border-gray-200 rounded-xl h-full' transition:slide={{ duration: 150, easing: quintInOut }}>
+                  <ul>
+                    {#each connectingVerses as { reference, text }, i (reference)}
+                      { @const lastItem = i === connectingVerses.length - 1 }
+
+                      <li class='mb-3 last:mb-0 relative'>
+                        <div class='flex items-center'>
+                          <span class='w-3.5 h-3.5 rounded-full border border-black mr-3' />
+
+                          <label class='font-semibold text-xs' for={reference}>
+                            {reference}
+                          </label>
+                        </div>
+
+                        <p
+                          id={reference}
+                          class='relative font-light text-gray-600 ml-7 mt-2 text-sm after:absolute after:bg-black after:w-px after:h-full after:block after:top-1.5 after:-left-[21px] before:w-1.5 before:h-1.5 before:absolute before:border-b before:border-b-black before:border-l before:border-l-black before:-left-[23.5px] before:-rotate-45 before:-bottom-1.5'
+                          class:after:invisible={lastItem}
+                          class:before:invisible={lastItem}>
+                          {text?.text}
+                        </p>
+                      </li>
+                    {/each}
+                  </ul>
+                </div>
+              {/if}
+            {/if}
+
+            {#if commentaries.length}
+              <!--Commentaries-->
+              <!-- svelte-ignore a11y-click-events-have-key-events -->
+              <!-- svelte-ignore a11y-no-static-element-interactions -->
+              <button
+                on:click={() => commentariesOpen = !commentariesOpen}
+                class='w-full flex items-center justify-between mt-4 py-4 px-5 bg-gray-50 border hover:bg-gray-100 border-gray-200 rounded-xl font-bold cursor-pointer'>
+                <div class='flex items-center'>
+                  <img class='w-[19.5px] mr-3' src='/commentaries.svg' alt='' aria-hidden />
+
+                  <p class='text-[12px]'>
+                    {commentaries.length} Commentaries
+                  </p>
+                </div>
+
+                <img
+                  class={commentariesOpen ? 'w-3 rotate-180 transition-transform' : 'w-3 transition-transform'}
+                  src='/carrot-down-xs.svg'
+                  alt=''
+                  aria-hidden
+                />
+              </button>
+
+              {#if commentariesOpen}
+                <div class='p-5 mt-2 bg-gray-50 border border-gray-200 rounded-xl h-full' transition:slide={{ duration: 150, easing: quintInOut }}>
+                  <ul>
+                    {#each commentaries as { author, reference, text } (reference)}
+                      <li class='mb-6 last:mb-0'>
+                        {#if reference}
+                          <div class='flex items-center'>
+                          <span class='w-3.5 h-3.5 rounded-full border border-black mr-3' />
+
+                          <label class='font-semibold text-xs' for={reference}>
+                            {reference}
+                          </label>
+                        </div>
+                        {/if}
+
+                        <p
+                          id={reference}
+                          class='font-light text-gray-600 text-sm'>
+                          "{text?.text}" —{author}
+                        </p>
+                      </li>
+                    {/each}
+                  </ul>
+                </div>
+              {/if}
+            {/if}
+
+            {#if note}
+              <div class='p-5 mt-6 bg-gray-50 border border-gray-200 rounded-xl h-full'>
+                <strong class='flex items-center text-xs mb-3'>
+                  <img class='w-4 mr-3' src='/note.svg' alt='' aria-hidden /> Note:
+                </strong>
+
+                <p class='font-light text-gray-600 text-sm'>{note}</p>
+              </div>
+            {/if}
           {/if}
 
           {#if response}
