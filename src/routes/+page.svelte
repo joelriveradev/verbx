@@ -12,7 +12,7 @@
       </h1>
 
       <p class='my-5 mb-8 font-light text-gray-600 max-w-sm'>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ornare pellentesque erat.
+        Verbx is the world's first immersive interactive learning platform for Bible study courses.
       </p>
 
       <div class='flex items-center'>
