@@ -66,7 +66,7 @@ export const courseEnrollment = async ({
       courseId,
       nextModule,
       progress: 0,
-      complete: false
+      complete: 0
     }
   ])
 
@@ -90,7 +90,7 @@ export const calculateProgress = async (userId: string, courseId: string) => {
       and(
         eq(moduleCompletion.userId, userId),
         eq(moduleCompletion.courseId, courseId),
-        eq(moduleCompletion.complete, true)
+        eq(moduleCompletion.complete, 1)
       )
     )
   return (completed.length / total.length) * 100
