@@ -1,9 +1,11 @@
 import type { CodegenConfig } from '@graphql-codegen/cli'
+import { config } from 'dotenv'
 
-const config: CodegenConfig = {
+config()
+
+const codegenConfig: CodegenConfig = {
   overwrite: true,
-  schema:
-    'https://us-east-1-shared-usea1-02.cdn.hygraph.com/content/cll9n28pn1fcu01uj03na9zl7/master',
+  schema: process.env.HYGRAPH_API_URL_HIGHPERF,
   generates: {
     'src/types/typegen/': {
       preset: 'client',
@@ -15,4 +17,4 @@ const config: CodegenConfig = {
   }
 }
 
-export default config
+export default codegenConfig

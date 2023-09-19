@@ -1,5 +1,5 @@
 import type { CourseResponse } from '../../../types'
-import type { PageServerLoad, Actions } from './$types'
+import type { Actions } from './$types'
 import type { Module } from '../../../types/typegen/graphql'
 import type { NewModuleCompletion } from '../../../db/index.server'
 
@@ -18,7 +18,7 @@ import { GET_BIBLE_STUDY } from '../../../queries'
 import { HYGRAPH_API_URL_HIGHPERF } from '$env/static/private'
 import { redirect } from '@sveltejs/kit'
 
-export const load: PageServerLoad = async ({ locals, params }) => {
+export const load = async ({ locals, params }) => {
   const session = await locals.getSession()
 
   if (!session) {
@@ -47,7 +47,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
           userId,
           courseId,
           moduleId: id,
-          complete: false
+          complete: 0
         })
       })
     })
@@ -65,7 +65,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
       activeModule: defaultModule,
       submitted: false,
       answer: null,
-      response: null,
+      feedback: null,
       progress: 0
     }
   }
@@ -117,11 +117,11 @@ export const actions = {
       userId,
       courseId,
       moduleId,
-      complete: true,
+      complete: 1,
       answer
     })
 
-    const progress = await calculateProgress(userId, courseId)
+    const progress = await calculateProgress(userId, courseId!)
     const complete = progress === 100
 
     await updateCourseProgress({
@@ -129,13 +129,13 @@ export const actions = {
       courseId,
       progress,
       nextModule: Number(order) + 1,
-      complete
+      complete: complete ? 1 : 0
     })
 
     return {
       answer,
       submitted: true,
-      response: null
+      feedback: {}
     }
   }
 } satisfies Actions
