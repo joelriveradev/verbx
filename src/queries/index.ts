@@ -9,10 +9,54 @@ export const GET_BIBLE_STUDIES = gql`
       image {
         url
       }
+    }
+  }
+`
+
+export const GET_BIBLE_STUDY = gql`
+  query getBibleStudyByID($id: ID) {
+    bibleStudy(where: { id: $id }) {
+      id
+      title
+      subtitle
+      overview
+      duration
+      image {
+        url
+      }
       sections {
         id
-        modules {
-          __typename
+        title
+        modules_v2 {
+          id
+          title
+          order
+          isCriticalthinking
+          introduction {
+            html
+          }
+          question
+          answer
+          verses {
+            reference
+            text {
+              text
+            }
+          }
+          commentaries {
+            text {
+              text
+            }
+            reference
+            author
+          }
+          connectingVerses {
+            reference
+            text {
+              text
+            }
+          }
+          note
         }
       }
     }
