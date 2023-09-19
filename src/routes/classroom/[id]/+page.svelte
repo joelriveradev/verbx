@@ -90,7 +90,7 @@
           {#each data.course.sections as section, i}
             <li>
               <CourseSection
-                sectionCompleted={data?.complete ?? false}
+                sectionCompleted={Boolean(data?.complete) ?? false}
                 activeModule={id}
                 {section}
                 handleModuleClick={() => {}}
