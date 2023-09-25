@@ -1,5 +1,23 @@
 import { gql } from 'graphql-request'
 
+export const GET_MODULE = gql`
+  query getModule($id: ID!) {
+    module(where: { id: $id }) {
+      introduction {
+        text
+      }
+      question
+      answer
+      verses {
+        reference
+        text {
+          text
+        }
+      }
+    }
+  }
+`
+
 export const GET_BIBLE_STUDIES = gql`
   {
     bibleStudies {

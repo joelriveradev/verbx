@@ -55,6 +55,7 @@
     "drizzle-orm": "^0.28.5",
     "graphql": "^16.8.0",
     "graphql-request": "^6.1.0",
-    "motion": "^10.16.2"
+    "motion": "^10.16.2",
+    "openai": "^4.8.0"
   }
 }
