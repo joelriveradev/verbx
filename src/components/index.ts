@@ -1,7 +1,0 @@
-export { default as Header } from './Header.svelte'
-export { default as Footer } from './Footer.svelte'
-export { default as CourseSection } from './CourseSection.svelte'
-export { default as ArrowLeft } from './icons/ArrowLeft.svelte'
-export { default as ArrowRight } from './icons/ArrowRight.svelte'
-export { default as ArrowUp } from './icons/ArrowUp.svelte'
-export { default as ProgressRing } from './ProgressRing.svelte'
