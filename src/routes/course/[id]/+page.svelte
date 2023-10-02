@@ -9,6 +9,11 @@
   )
 </script>
 
+<svelte:head>
+  <title>{course.title}</title>
+  <meta name='description' content={course.subtitle} />
+</svelte:head>
+
 {#if course}
   <div>
     <!--Hero Section-->

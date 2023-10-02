@@ -45,6 +45,11 @@
   }
 </script>
 
+<svelte:head>
+  <title>{data.course.title}</title>
+  <meta name='description' content={data.course.subtitle} />
+</svelte:head>
+
 <div class='flex items-start justify-between min-h-screen'>
   {#if data.activeModule}
 
