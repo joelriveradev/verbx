@@ -3,6 +3,15 @@
   const { bibleStudies: courses } = data
 </script>
 
+<svelte:head>
+  <title>Verbx</title>
+
+  <meta
+    name='description'
+    content={`The world's first platform for immersive interactive bible study experiences.`}
+  />
+</svelte:head>
+
 <div class='w-full lg:flex flex-col'>
   <!--Hero Section-->
   <section class='w-full lg:flex items-center justify-between mx-auto px-10 py-10 lg:py-10 lg:px-28 border-b border-b-gray-100'>
@@ -12,7 +21,7 @@
       </h1>
 
       <p class='my-5 mb-8 font-light text-gray-600 max-w-sm'>
-        Verbx is the world's first immersive interactive learning platform for Bible study courses.
+        Verbx is the world's first platform for immersive interactive bible study experiences.
       </p>
 
       <div class='flex items-center'>

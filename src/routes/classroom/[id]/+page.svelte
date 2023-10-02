@@ -2,8 +2,13 @@
   import '../../../app.postcss'
 
   import type { PageData } from './$types'
+  import type { ChatGPTResponse } from '$lib/integrations/openAI/feedback'
 
-  import { CourseSection, ArrowRight, ArrowUp, ProgressRing } from '../../../components'
+  import CourseSection from '$lib/components/CourseSection.svelte'
+  import ArrowRight from '$lib/components/icons/ArrowRight.svelte'
+  import ArrowUp from '$lib/components/icons/ArrowUp.svelte'
+  import ProgressRing from '$lib/components/ProgressRing.svelte'
+
   import { enhance } from '$app/forms'
   import { slide } from 'svelte/transition'
   import { quintInOut } from 'svelte/easing'
@@ -16,7 +21,7 @@
   let answer      : string  = ''
   let disabled    : boolean
   let submitted   : boolean = false
-  let response    : string | null
+  let response    : ChatGPTResponse | null
   let cnVerseOpen : boolean = true
   let commentariesOpen = true
 
@@ -27,7 +32,7 @@
     answer,
     disabled = !answer.trim() // .trim removes whitespaces
     submitted,
-    response  = null
+    response
   }
 
   onMount(() => {
@@ -35,7 +40,19 @@
       animate(titleRef, { opacity: 1, }, { duration: 1 })
     }
   })
+
+  const handleFormResult = (result: unknown) => {
+    // console.log({ result })
+    if(result) {
+      response = result as ChatGPTResponse
+    }
+  }
 </script>
+
+<svelte:head>
+  <title>{data.course.title}</title>
+  <meta name='description' content={data.course.subtitle} />
+</svelte:head>
 
 <div class='flex items-start justify-between min-h-screen'>
   {#if data.activeModule}
@@ -175,8 +192,8 @@
                     isLoading = false
                     submitted = true
 
-                    if(result?.data?.feedback){
-                      response = result.data.feedback
+                    if(result.data){
+                      handleFormResult(result.data.response)
                     }
                   }
                 }
@@ -199,21 +216,12 @@
                   <button
                     type='submit'
                     disabled={disabled}
-                    class='w-5 h-5 rounded-full flex items-center justify-center scale-90 hover:scale-110 transition-all absolute right-4'
+                    class='w-5 h-5 rounded-full flex items-center justify-center scale-90 hover:scale-110 transition-all absolute right-3'
                     class:bg-black={!disabled && !submitted}
                     class:scale-100={!disabled}
-                    class:bg-green-100={submitted}
-                    class:bg-gray-300={disabled}
-                    class:cursor-not-allowed={disabled}>
-
-                    {#if submitted}
-                      <img
-                        src='/submitted.svg'
-                        alt='A green check icon'
-                      />
-                      {:else}
-                        <ArrowUp variant='light' classname='w-2 bg-green' />
-                    {/if}
+                    class:bg-gray-300={disabled || submitted}
+                    class:cursor-not-allowed={disabled || submitted}>
+                    <ArrowUp variant='light' classname='w-2 bg-green' />
                   </button>
                 {/if}
 
@@ -223,7 +231,26 @@
               </div>
             </form>
 
-            {#if  connectingVerses.length}
+            {#if submitted && response}
+              { @const { acceptable, feedback } = response }
+
+              <div
+                class='rounded-xl py-4 px-5 mt-6 border'
+                class:bg-[#F8FFFD]={acceptable}
+                class:bg-[#F8F9FF]={!acceptable}
+                class:border-[#0E7455]={acceptable}
+                class:border-[#716FED]={!acceptable}>
+
+                <p
+                  class='text-sm block font-light'
+                  class:text-[#0E7455]={acceptable}
+                  class:text-[#716FED]={!acceptable}>
+                  {feedback}
+                </p>
+              </div>
+            {/if}
+
+            {#if submitted && connectingVerses.length}
               <!--Connecting Verses-->
               <!-- svelte-ignore a11y-click-events-have-key-events -->
               <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -275,7 +302,7 @@
               {/if}
             {/if}
 
-            {#if commentaries.length}
+            {#if submitted && commentaries.length}
               <!--Commentaries-->
               <!-- svelte-ignore a11y-click-events-have-key-events -->
               <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -325,7 +352,7 @@
               {/if}
             {/if}
 
-            {#if note}
+            {#if submitted && note}
               <div class='p-5 mt-6 bg-gray-50 border border-gray-200 rounded-xl h-full'>
                 <strong class='flex items-center text-xs mb-3'>
                   <img class='w-4 mr-3' src='/note.svg' alt='' aria-hidden /> Note:
@@ -334,12 +361,6 @@
                 <p class='font-light text-gray-600 text-sm'>{note}</p>
               </div>
             {/if}
-          {/if}
-
-          {#if response}
-            <small class='mt-4 text-sm block'>
-              {response}
-            </small>
           {/if}
         </div>
       </main>

@@ -1,6 +1,6 @@
 import { SvelteKitAuth } from '@auth/sveltekit'
 import { db, insertUser } from './db/index.server'
-import { users } from './db/drizzle/schema'
+import { user as users } from './db/drizzle/schema'
 import { eq } from 'drizzle-orm'
 
 import Google from '@auth/core/providers/google'
@@ -36,7 +36,7 @@ export const handle = SvelteKitAuth({
         // check to see if the user
         // is already in our database
         const res = await db.select().from(users).where(eq(users.userId, userId))
-        const verified = profile?.email_verified
+        const verified = Number(profile?.email_verified)
 
         // If not, add them
         if (!res.length) {

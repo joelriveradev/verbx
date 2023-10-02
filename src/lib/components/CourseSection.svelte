@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import type { Section } from '../types/typegen/graphql'
+  import type { Section } from '../../types/typegen/graphql'
 
   export let section: Section
   export let open = false

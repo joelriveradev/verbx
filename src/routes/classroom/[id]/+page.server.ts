@@ -7,14 +7,16 @@ import {
   updateCourseProgress,
   updateModuleCompletion,
   courseEnrollment,
-  calculateProgress
+  calculateProgress,
+  insertFeedback
 } from '../../../db/index.server'
 
 import { db } from '../../../db/index.server'
 import { eq } from 'drizzle-orm'
 import { courseProgress } from '../../../db/drizzle/schema'
+import { getChatGPTFeedback } from '$lib/integrations/openAI/feedback'
 import { GraphQLClient } from 'graphql-request'
-import { GET_BIBLE_STUDY } from '../../../queries'
+import { GET_BIBLE_STUDY, GET_MODULE } from '../../../queries'
 import { HYGRAPH_API_URL_HIGHPERF } from '$env/static/private'
 import { redirect } from '@sveltejs/kit'
 
@@ -107,6 +109,7 @@ export const actions = {
     const data = await request.formData()
     const user = session?.user
     const userId = user?.id
+    const hygraph = new GraphQLClient(HYGRAPH_API_URL_HIGHPERF)
 
     const courseId = params.id
     const moduleId = data.get('moduleId') as string
@@ -121,7 +124,7 @@ export const actions = {
       answer
     })
 
-    const progress = await calculateProgress(userId, courseId!)
+    const progress = await calculateProgress(userId, courseId)
     const complete = progress === 100
 
     await updateCourseProgress({
@@ -132,10 +135,41 @@ export const actions = {
       complete: complete ? 1 : 0
     })
 
-    return {
-      answer,
-      submitted: true,
-      feedback: {}
+    const { module } = await hygraph.request<{ module: Module }>(GET_MODULE, { id: moduleId })
+
+    // chatGPT evaluation
+    if (!module.introduction && module.question && module.answer) {
+      const { question, answer: expected_answer, verses } = module
+
+      const scripture_ref = verses[0]?.reference || undefined
+      const scripture_text = verses[0]?.text?.text || undefined
+
+      const response = await getChatGPTFeedback({
+        question,
+        answer,
+        expected_answer,
+        verse: {
+          reference: scripture_ref,
+          text: scripture_text
+        }
+      })
+
+      if (response) {
+        await insertFeedback({
+          question,
+          answer,
+          feedback: response.feedback,
+          acceptable: Number(response.acceptable),
+          scripture_ref,
+          scripture_text
+        })
+
+        return {
+          answer,
+          submitted: true,
+          response
+        }
+      }
     }
   }
 } satisfies Actions

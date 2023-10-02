@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import CourseSection from '../../../components/CourseSection.svelte'
+  import CourseSection from '$lib/components/CourseSection.svelte'
   export let data
 
   const { progress, bibleStudy: course } = data
@@ -8,6 +8,11 @@
     (prev, { modules_v2 }) => prev + modules_v2.length, 0
   )
 </script>
+
+<svelte:head>
+  <title>{course.title}</title>
+  <meta name='description' content={course.subtitle} />
+</svelte:head>
 
 {#if course}
   <div>

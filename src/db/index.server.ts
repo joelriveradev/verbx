@@ -1,7 +1,7 @@
 import { eq, and } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/planetscale-serverless'
 import { connect } from '@planetscale/database'
-import { courseProgress, moduleCompletion, user } from './drizzle/schema'
+import { courseProgress, moduleCompletion, feedback, user } from './drizzle/schema'
 import { NODE_ENV, DATABASE_URL_PROD, DATABASE_URL_DEV } from '$env/static/private'
 
 const connection = connect({
@@ -13,6 +13,11 @@ export const db = drizzle(connection)
 export type User = typeof user.$inferInsert
 export type NewCourseProgress = typeof courseProgress.$inferInsert
 export type NewModuleCompletion = typeof moduleCompletion.$inferInsert
+export type NewFeedback = typeof feedback.$inferInsert
+
+export const insertFeedback = async (fb: NewFeedback) => {
+  return await db.insert(feedback).values(fb)
+}
 
 export const insertUser = async (u: User) => {
   return await db.insert(user).values(u)
