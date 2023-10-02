@@ -1,7 +1,8 @@
 <script lang='ts'>
   import { signIn } from '@auth/sveltekit/client'
   export let data
-  $: loading = ''
+
+  let loading = ''
 
   const handleProviderClick = (id: string, callbackUrl: string) => {
     signIn(id, { callbackUrl })
