@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import CourseSection from '../../../components/CourseSection.svelte'
+  import CourseSection from '$lib/components/CourseSection.svelte'
   export let data
 
   const { progress, bibleStudy: course } = data

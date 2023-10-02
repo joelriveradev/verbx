@@ -4,7 +4,11 @@
   import type { PageData } from './$types'
   import type { ChatGPTResponse } from '$lib/integrations/openAI/feedback'
 
-  import { CourseSection, ArrowRight, ArrowUp, ProgressRing } from '../../../components'
+  import CourseSection from '$lib/components/CourseSection.svelte'
+  import ArrowRight from '$lib/components/icons/ArrowRight.svelte'
+  import ArrowUp from '$lib/components/icons/ArrowUp.svelte'
+  import ProgressRing from '$lib/components/ProgressRing.svelte'
+
   import { enhance } from '$app/forms'
   import { slide } from 'svelte/transition'
   import { quintInOut } from 'svelte/easing'
