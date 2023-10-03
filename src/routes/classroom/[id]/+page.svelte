@@ -42,10 +42,7 @@
   })
 
   const handleFormResult = (result: unknown) => {
-    // console.log({ result })
-    if(result) {
-      response = result as ChatGPTResponse
-    }
+    if(result) response = result as ChatGPTResponse
   }
 </script>
 
@@ -168,7 +165,6 @@
           {#if !introduction}
             <header>
               <div class='flex items-start mt-5 mb-3'>
-                <img class='pt-1 w-5 mr-3' {src} alt='' aria-hidden />
                 <h1 class='font-medium text-xl'>{question}</h1>
               </div>
             </header>
