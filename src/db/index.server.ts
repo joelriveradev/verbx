@@ -59,6 +59,15 @@ interface CourseEnrollmentProps {
   modules: Array<NewModuleCompletion>
 }
 
+export const getUserProgress = async (userId: string, courseId: string) => {
+  const progress = await db
+    .select()
+    .from(courseProgress)
+    .where(and(eq(courseProgress.userId, userId), eq(courseProgress.courseId, courseId)))
+
+  return !progress.length ? null : progress[0]
+}
+
 export const courseEnrollment = async ({
   courseId,
   userId,
@@ -98,5 +107,6 @@ export const calculateProgress = async (userId: string, courseId: string) => {
         eq(moduleCompletion.complete, 1)
       )
     )
+
   return (completed.length / total.length) * 100
 }

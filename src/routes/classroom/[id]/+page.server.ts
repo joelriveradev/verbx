@@ -7,13 +7,11 @@ import {
   updateCourseProgress,
   updateModuleCompletion,
   courseEnrollment,
+  getUserProgress,
   calculateProgress,
   insertFeedback
 } from '../../../db/index.server'
 
-import { db } from '../../../db/index.server'
-import { eq } from 'drizzle-orm'
-import { courseProgress } from '../../../db/drizzle/schema'
 import { getChatGPTFeedback } from '$lib/integrations/openAI/feedback'
 import { GraphQLClient } from 'graphql-request'
 import { GET_BIBLE_STUDY, GET_MODULE } from '../../../queries'
@@ -34,13 +32,13 @@ export const load = async ({ locals, params }) => {
   let lastModule: Module | undefined
   let modules: Array<NewModuleCompletion> = []
 
-  const progress = await db.select().from(courseProgress).where(eq(courseProgress.userId, userId))
   const hygraph = new GraphQLClient(HYGRAPH_API_URL_HIGHPERF)
   const bibleStudy = await hygraph.request<CourseResponse>(GET_BIBLE_STUDY, { id: courseId })
+  const userProgress = await getUserProgress(userId, courseId)
 
   const { bibleStudy: course } = bibleStudy
 
-  if (!progress.length) {
+  if (!userProgress) {
     const defaultModule = course.sections[0].modules_v2[0]
 
     course.sections.forEach(({ modules_v2 }) => {
@@ -72,20 +70,22 @@ export const load = async ({ locals, params }) => {
     }
   }
 
+  const { nextModule, complete, progress } = userProgress
+
   // This is faster than making yet
   // another call to the CMS. We already
   // have the data, might as well use it.
   course.sections.forEach(({ modules_v2 }) => {
-    const nextModule = modules_v2.find(({ order }) => {
-      return order === progress[0].nextModule
+    const next = modules_v2.find(({ order }) => {
+      return order === nextModule
     })
 
-    if (nextModule) {
-      activeModule = nextModule
+    if (next) {
+      activeModule = next
     }
-    if (progress[0].complete) {
+    if (complete) {
       const last = modules_v2.find(({ order }) => {
-        return order === progress[0].nextModule! - 1
+        return order === nextModule! - 1
       })
 
       if (last) {
@@ -97,9 +97,9 @@ export const load = async ({ locals, params }) => {
   return {
     session,
     course,
-    activeModule: progress[0].complete ? lastModule : activeModule,
-    progress: progress[0].progress,
-    complete: progress[0].complete
+    activeModule: complete ? lastModule : activeModule,
+    progress,
+    complete
   }
 }
 

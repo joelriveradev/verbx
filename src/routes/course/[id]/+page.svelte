@@ -1,7 +1,8 @@
 <script lang='ts'>
+  import { color } from '$lib/state/color.js'
   import CourseSection from '$lib/components/CourseSection.svelte'
-  export let data
 
+  export let data
   const { progress, bibleStudy: course } = data
 
     const moduleCount = course?.sections.reduce(
@@ -18,12 +19,12 @@
   <div>
     <!--Hero Section-->
     <section class='w-full lg:flex items-center justify-between mx-auto px-10 py-10 lg:py-20 lg:px-28 border-b border-b-gray-100'>
-      <div class='max-w-md'>
+      <div class='max-w-lg'>
         <h1 class='font-bold text-3xl lg:text-5xl'>
           {course.title}
         </h1>
 
-        <p class='my-5 mb-8 font-light text-gray-600 max-w-sm'>
+        <p class='my-5 mb-8 font-light text-gray-600 max-w-lg'>
           {course.subtitle}
         </p>
 
@@ -44,8 +45,8 @@
       </div>
 
       <div
-        class="w-96 h-72 rounded-xl bg-no-repeat bg-cover"
-        style:background-image = "url('{course.image.url}')"
+        class="w-96 h-72 rounded-xl"
+        style:background='{$color}'
       />
     </section>
 
