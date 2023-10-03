@@ -24,7 +24,7 @@
           {course.title}
         </h1>
 
-        <p class='my-5 mb-8 font-light text-gray-600 max-w-sm'>
+        <p class='my-5 mb-8 font-light text-gray-600 max-w-lg'>
           {course.subtitle}
         </p>
 
