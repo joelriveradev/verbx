@@ -45,7 +45,7 @@ export const GET_BIBLE_STUDY = gql`
       sections {
         id
         title
-        modules_v2 {
+        modules_v2(first: 100) {
           id
           title
           order

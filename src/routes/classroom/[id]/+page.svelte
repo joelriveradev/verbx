@@ -71,7 +71,7 @@
     {@const src = (!isCriticalthinking ? '/book.svg': '/spark.svg')}
     {@const progress = data.progress}
 
-    <div class='border-r border-r-gray-100 w-1/2 h-screen'>
+    <div class='border-r border-r-gray-100 w-1/2 min-h-screen'>
       <header class='p-10 border-b border-b-gray-100'>
         <a class='text-xs text-gray-500 hover:underline flex items-center' href='/course/{data.course.id}'>
           <img class='w-4 mr-2' src='/arrow-left-xs.svg' aria-hidden alt='' />
@@ -99,7 +99,7 @@
         {/if}
       </header>
 
-      <nav>
+      <nav class='h-full'>
         <ul>
           {#each data.course.sections as section, i}
             <li>
