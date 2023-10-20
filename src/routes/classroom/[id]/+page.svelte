@@ -68,7 +68,6 @@
       } = data.activeModule
     }
 
-    {@const src = (!isCriticalthinking ? '/book.svg': '/spark.svg')}
     {@const progress = data.progress}
 
     <div class='border-r border-r-gray-100 w-1/2 min-h-screen'>
@@ -129,18 +128,22 @@
     {#if !data.complete}
       <main class='opacity-0 w-3/4 h-full p-10' bind:this={titleRef}>
         <div class='max-w-xl'>
-          <button
-            class='text-xs flex items-center group'
-            class:opacity-30={!submitted}
-            class:cursor-not-allowed={disabled}
-            disabled={disabled}
-            on:click={() => {
-            if(submitted){
-              window.location.href = ''
-            }
-          }}>
-            Next <ArrowRight classname='w-3 ml-1 group-hover:ml-2 transition-all' />
-          </button>
+          <div class='flex items-center justify-between'>
+            <small>{title}</small>
+
+            <button
+              class='text-xs flex items-center group'
+              class:opacity-30={!submitted}
+              class:cursor-not-allowed={disabled}
+              disabled={disabled}
+              on:click={() => {
+              if(submitted){
+                window.location.href = ''
+              }
+            }}>
+              Next <ArrowRight classname='w-3 ml-1 group-hover:ml-2 transition-all' />
+            </button>
+          </div>
 
           <!--Section Modules-->
           {#if introduction}
@@ -165,12 +168,16 @@
           {#if !introduction}
             <header>
               <div class='flex items-start mt-5 mb-3'>
-                <h1 class='font-medium text-xl'>{question}</h1>
+                <h1 class='font-medium text-xl'>
+                  {question}
+                </h1>
               </div>
             </header>
 
-            {#each verses as { id, text } (id) }
-              <p class='mt-3 text-lg text-gray-500 font-light'>
+            {#each verses as { id, text, reference } (id) }
+              <small>Read {reference}:</small>
+
+              <p class='mt-1.5 text-lg text-gray-500 font-light'>
                 {text?.text}
               </p>
             {/each}
