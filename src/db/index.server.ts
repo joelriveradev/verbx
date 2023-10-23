@@ -32,7 +32,10 @@ export const insertCourseProgress = async (cp: Array<NewCourseProgress>) => {
 }
 
 export const updateCourseProgress = async (cp: NewCourseProgress) => {
-  return await db.update(courseProgress).set(cp).where(eq(courseProgress.userId, cp.userId!))
+  return await db
+    .update(courseProgress)
+    .set(cp)
+    .where(and(eq(courseProgress.userId, cp.userId!), eq(courseProgress.courseId, cp.courseId!)))
 }
 
 export const insertModuleCompletion = async (mc: Array<NewModuleCompletion>) => {
