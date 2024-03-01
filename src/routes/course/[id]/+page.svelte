@@ -1,6 +1,7 @@
 <script lang='ts'>
   import { color } from '$lib/state/color.js'
   import CourseSection from '$lib/components/CourseSection.svelte'
+  import Newsletter from '$lib/components/Newsletter.svelte'
 
   export let data
   const { progress, bibleStudy: course } = data
@@ -45,7 +46,7 @@
       </div>
 
       <div
-        class="w-96 h-72 rounded-xl"
+        class="hidden lg:block w-96 h-72 rounded-xl"
         style:background='{$color}'
       />
     </section>
@@ -58,12 +59,12 @@
 
         <div class='flex items-center mt-4'>
           <div class='flex items-center'>
-            <img class='w-4' src='/clock.svg' alt='' aria-hidden />
+            <img class='hidden w-4' src='/clock.svg' alt='' aria-hidden />
             <span class='ml-2'>{course.duration}</span>
           </div>
 
           <div class='flex items-center mx-5'>
-            <img class='w-4' src='/sections.svg' alt='' aria-hidden />
+            <img class='hidden w-4' src='/sections.svg' alt='' aria-hidden />
 
             <span class='ml-2'>
               {course.sections.length} Sections
@@ -71,7 +72,7 @@
           </div>
 
           <div class='flex items-center'>
-            <img class='w-4' src='/modules.svg' alt='' aria-hidden />
+            <img class='hidden w-4' src='/modules.svg' alt='' aria-hidden />
 
             <span class='ml-2'>
               {moduleCount} Modules
@@ -80,7 +81,7 @@
         </div>
       </div>
 
-      <div class='w-96 h-72 bg-slate-800 rounded-xl' />
+      <div class='hidden lg:block w-96 h-72 bg-slate-800 rounded-xl' />
     </section>
 
     <!--Course Content Section-->
@@ -93,17 +94,6 @@
     </section>
 
     <!--Newsletter Section-->
-    <section class='flex items-center justify-between px-10 py-10 lg:py-16 lg:pb-20 lg:px-28 border-t border-t-gray-100'>
-      <div class='max-w-md'>
-        <h1 class='font-bold text-4xl mb-4'>Get notified when we're launching.</h1>
-        <p class='font-light max-w-xs text-gray-600'>Receive the latest Verbx news and updates straight to your inbox.</p>
-      </div>
-
-      <form>
-        <label for="email-address" class="sr-only">Email address</label>
-        <input class='min-w-0 w-80 flex-auto rounded-xl border-0 px-5 py-2.5 text-black mr-2 ring-1 ring-inset ring-black focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cornflower sm:text-sm sm:leading-6' type='email' name="email" id="email-address" placeholder='Enter your email' autocomplete="email" required />
-        <button class='bg-black text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-cornflower focus:bg-cornflower focus:outline-none'>Notify me</button>
-      </form>
-    </section>
+    <Newsletter />
   </div>
 {/if}

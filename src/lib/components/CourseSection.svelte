@@ -3,11 +3,11 @@
 
   export let section: Section
   export let open = false
-  export let activeModule: string
+  export let activeModule: string = ''
   export let sectionCompleted: boolean = false
   export let padding = false
   export let showComplete = false
-  export let handleModuleClick: (id: string) => void
+  export let handleModuleClick = (id: string) => {}
 
   const toggleActive = () => open = !open
 </script>
