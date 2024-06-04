@@ -83,6 +83,7 @@ export const load = async ({ locals, params }) => {
     if (next) {
       activeModule = next
     }
+
     if (complete) {
       const last = modules_v2.find(({ order }) => {
         return order === nextModule! - 1
@@ -105,8 +106,10 @@ export const load = async ({ locals, params }) => {
 
 export const actions = {
   default: async ({ locals, request, params }) => {
+
     const session = await locals.getSession()
     const data = await request.formData()
+
     const user = session?.user
     const userId = user?.id
     const hygraph = new GraphQLClient(HYGRAPH_API_URL_HIGHPERF)
